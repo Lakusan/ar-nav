@@ -12,6 +12,7 @@ const mongoose = require('mongoose');
 //Import Routes
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const postsRouter = require('./routes/posts');
 
 //Environment variables
 dotenv.config();
@@ -41,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Routes
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/posts', postsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
