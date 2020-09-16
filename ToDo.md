@@ -24,6 +24,8 @@ FRONTEND
 - Main
     - Leaflet: (Show POIs per category)
         -> should max that to 5 per x km or smth
+        -> Zoom, Toggle Sattelite Images
+        -> 
     - Calc distance to POI and other Calculations
     - AR.js basic setup
     - Geolocation Position Data
