@@ -4,9 +4,11 @@ const bcrypt = require('bcryptjs');
 const User = require('../model/User');
 const jwt = require('jsonwebtoken');
 const { registerValidation, loginValidation } = require('../validation');
+const bodyParser = require('body-parser');
+const urlencodedParser = bodyParser.urlencoded({extended: false});
 
 //Register User 
-router.post('/register', async (req, res) => {
+router.post('/register',urlencodedParser, async (req, res) => {
 
   //Validate Input
   const { error } = registerValidation(req.body);
@@ -31,15 +33,16 @@ router.post('/register', async (req, res) => {
   })
   try {
     const savedUser = await user.save();
-    res.send({ user: user._id });
+    // res.send({ user: user._id });
+    res.redirect('/auth/login');
   } catch (err) {
     res.status(400).send(err);
   }
 });
 
 //Login 
-router.post('/login', async (req, res) => {
-
+router.post('/login', urlencodedParser, async (req, res) => {
+ 
   //Validate Input
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -54,8 +57,22 @@ router.post('/login', async (req, res) => {
 
   //create and assign a token
   const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-  res.header('auth-token', token).send(token);
+  res.header('auth-token', token);
+  if(token) return res.redirect('/main');
+});
 
+router.get('/logout', (req, res) => {
+  toke = '';
+  res.header('auth-token', '');
+  res.render('logout', { title: 'Login'});
+});
+
+router.get('/login',  (req, res,next) => {
+  res.render('login', { title: 'Login'});
+});
+
+router.get('/register',  (req, res,next) => {
+  res.render('register', { title: 'Register'});
 });
 
 module.exports = router;

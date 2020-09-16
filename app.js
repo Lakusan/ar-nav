@@ -3,16 +3,19 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const handlebars = require('express-handlebars');
+const hbs = require('express-handlebars');
 const bodyParser = require('body-parser');
+
 //const expressSession= require('express-session');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
-//Import Routes
+//Import Routes<h1>MAIN CONTENT</h1>
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const postsRouter = require('./routes/posts');
+const mainRouter = require('./routes/main');
+const guestRouter = require('./routes/guest');
 
 //Environment variables
 dotenv.config();
@@ -27,11 +30,11 @@ const app = express();
 
 //middleware
 // view engine
-app.engine('handlebars', handlebars({extname: 'handlebars', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts/'}));
+app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts/'}));
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'handlebars');
+app.set('view engine', 'hbs');
 app.use(logger('dev'));
-//app.use(bodyParser.json());
+app.use(bodyParser.json());
 app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
 //app.use(bodyParser.urlencoded({extended: false}));
@@ -43,6 +46,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/posts', postsRouter);
+app.use('/main', mainRouter);
+app.use('/guest', guestRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
