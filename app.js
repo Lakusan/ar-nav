@@ -5,6 +5,10 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const hbs = require('express-handlebars');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+const session = require('express-session');
+
+
 
 //const expressSession= require('express-session');
 const dotenv = require('dotenv');
@@ -38,8 +42,10 @@ app.use(bodyParser.json());
 app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
 //app.use(bodyParser.urlencoded({extended: false}));
+app.use(cors());
 app.use(cookieParser());
-//app.use(expressSession({secret: 'max', saveUninitialized: false, resave: false}));
+// process.env.TOKEN_SECRET
+app.use(expressSession({secret: 'max', saveUninitialized: false, resave: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Routes
