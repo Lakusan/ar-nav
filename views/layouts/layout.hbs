@@ -4,34 +4,123 @@
 <head>
   <title>{{ title }}</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
+  {{!-- OnsenUI --}}
   <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
   <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
   <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+  <!-- Leaflet.js -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
 </head>
 
 <body>
+
+<ons-splitter>
+  <ons-splitter-side id="onsen-Menu" side="left" width="220px" collapse swipeable>
+    <ons-page>
+      <ons-list>
+        <ons-list-item onclick="fn.load('home.html')" tappable>
+          Home
+        </ons-list-item>
+        <ons-list-item onclick="fn.load('settings.html')" tappable>
+          Logout
+        </ons-list-item>
+        <ons-list-item onclick="fn.load('about.html')" tappable>
+          About
+        </ons-list-item>
+      </ons-list>
+    </ons-page>
+  </ons-splitter-side>
+  <ons-splitter-content id="content" page="home.html"></ons-splitter-content>
+</ons-splitter>
+
+
+
+<template id="home.html">
   <ons-page>
     <ons-toolbar>
-      <h2 style="color: #2979ff" class="center">{{ title }}</h2>
-      <div class="right">
+      <div class="left">
         <ons-toolbar-button onclick="fn.open()">
-          <ons-icon icon="ion-navicon, material:md-menu"></ons-icon>
+          <ons-icon icon="md-menu"></ons-icon>
         </ons-toolbar-button>
       </div>
+      <div class="center">
+        {{title}}
+      </div>
     </ons-toolbar>
-    <ons-splitter>
-      <ons-splitter-side id="menu" side="left" width="220px" collapse swipeable>
-      </ons-splitter-side>
-      <ons-splitter-content id="content"></ons-splitter-content>
-    </ons-splitter>
-    {{{ body }}}
-    </ons-page>
+    <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
+  {{{ body }}}
+    </p>
+  </ons-page>
+</template>
+
+<template id="settings.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button onclick="fn.open()">
+          <ons-icon icon="md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+      <div class="center">
+        Logout
+      </div>
+    </ons-toolbar>
+  </ons-page>
+</template>
+
+<template id="about.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button onclick="fn.open()">
+          <ons-icon icon="md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+      <div class="center">
+        About
+      </div>
+    </ons-toolbar>
+    <h1>Thank you :)</h1>
+
+    Picture of githb account image
+    Whoami
+
+    SRH Heidelberg link
+
+
+    Follow me on Github
+    https://github.com/Lakusan/ar-nav.git
+
+    Lakussan
+
+    SRH Heidelberg
+  </ons-page>
+</template>
+   
+ 
+  
+
     <script>
       window.fn = {};
-      window.fn.open = () => {
-        var menu = document.getElementById('menu');
-        menu.open();
-      };
+
+window.fn.open = function() {
+  var menu = document.getElementById('onsen-Menu');
+  menu.open();
+};
+
+window.fn.load = function(page) {
+  var content = document.getElementById('content');
+  var menu = document.getElementById('onsen-Menu');
+  content.load(page)
+    .then(menu.close.bind(menu));
+};
+
+
     </script>
 </body>
 </html>

@@ -5,7 +5,7 @@ const User = require('../model/User');
 
 
 /* GET home page. */
-router.get('/', verify,  (req, res,next) => {
+router.get('/',   (req, res,next) => {
   res.render('main', { title: 'Main'});
 });
 

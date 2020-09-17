@@ -49,16 +49,27 @@ router.post('/login', urlencodedParser, async (req, res) => {
 
   // Check if email exits
   const user = await User.findOne({ email: req.body.email });
-  if (!user) return res.status(400).send('Invalid EMail');
+  if (!user) return res.status(400).send('Invalid E-Mail');
 
   //Password is correct
   const validPass = await bcrypt.compare(req.body.password, user.password);
   if(!validPass) return res.status(400).send('Invalid Password')
 
-  //create and assign a token
-  const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-  res.header('auth-token', token);
-  if(token) return res.redirect('/main');
+  //create and assign a token -> Depreched -> Express Session
+  //const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
+  //res.header('auth-token', token).send(token);
+
+  //put generated token in cookie send it to req  -> Depreched -> Express Session
+  //TODO: 
+    //Put all the relevant stuff in .env
+    //secure: true if HTTPS
+      //httpOnly -> false or rm
+  // res.cookie('token', token, {
+  //   expires: new Date(Date.now() + 1000000),
+  //   secure: false,
+  //   httpOnly: true,
+  // });
+  res.redirect('/main');
 });
 
 router.get('/logout', (req, res) => {

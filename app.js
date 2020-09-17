@@ -45,7 +45,7 @@ app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 // process.env.TOKEN_SECRET
-app.use(expressSession({secret: 'max', saveUninitialized: false, resave: false}));
+app.use(session({secret: 'max', saveUninitialized: false, resave: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Routes

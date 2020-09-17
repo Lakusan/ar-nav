@@ -32,8 +32,6 @@ body {
   padding: 1em;
 }
 
-
-
 .wrapper>div:nth-child(odd) {
   background: #ffa9;
 }
@@ -51,7 +49,6 @@ body {
   padding-top: 40px;
   transition: 0.5s;
 }
-
 
 @media screen and (max-height: 450px) {
   .bottombar {
@@ -86,9 +83,6 @@ body {
   cursor: pointer;
 }
 
-.btnLarge {
-  
-}
 
 
 

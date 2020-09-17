@@ -19,9 +19,9 @@ BACKEND
         - Geolocation POI
 
 FRONTEND
-- Register Form
-- Login Form (Btn: Register, Login, Guest)
-- Main
++ Register Form
++ Login Form (Btn: Register, Login, Guest)
++ Main
     - Leaflet: (Show POIs per category)
         -> should max that to 5 per x km or smth
         -> Zoom, Toggle Sattelite Images
@@ -40,3 +40,7 @@ FRONTEND
     - Guest:
             - Only Demonstration (View Mode without Comments)
 
+
+
+
+What now: Get Data from OpenStreetMap an pass it to DB
