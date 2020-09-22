@@ -1,54 +1,5 @@
-<div class="menu-wrapper">
-    <div id="menubar">
-      <div>Own_latitude: <span id="latitude"></span>&deg;</br></div>
-      <div>Own_longitude: <span id="longitude"></span>&deg;</div>
-    </div>
 
-
-    <div id="myBottombar" class="bottombar">
-      <button id="btnToggleMap" onclick="toggleMap()">Map</button>
-      <div id="mymap"></div>
-    </div>
     
 
-<script>
-    //Toggle Buttons für Map and Menu
-      let isMap = false;
-      let isSet = false;
 
-      function toggleMap() {
-        let myBottombar = document.getElementById("myBottombar");
-        if (!isMap) {
-          myBottombar.style.height = "200px";
-          isMap = true;
-        }
-        else {
-          myBottombar.style.height = "0";
-          isMap = false;
-        }
-      }
-
-      function toogleSettingsMenu() {
-        let settings = document.getElementById("settingsMenuButtons");
-        if (!isSet) {
-          settings.style.top = "0px";
-          isSet = true;
-        }
-        else {
-          settings.style.top = "-100px";
-          isSet = false;
-        }
-      }
-
-      function toogleSettingsBtn() {
-        console.log("settings");
-      }
-      function toogleQuitBtn() {
-        console.log("Quit");
-
-      }
-      function toogleMenuBtn() {
-        console.log("Menu");
-      }
-</script>
 

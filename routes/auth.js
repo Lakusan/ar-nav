@@ -55,28 +55,24 @@ router.post('/login', urlencodedParser, async (req, res) => {
   const validPass = await bcrypt.compare(req.body.password, user.password);
   if(!validPass) return res.status(400).send('Invalid Password')
 
-  //create and assign a token -> Depreched -> Express Session
-  //const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-  //res.header('auth-token', token).send(token);
-
-  //put generated token in cookie send it to req  -> Depreched -> Express Session
-  //TODO: 
-    //Put all the relevant stuff in .env
-    //secure: true if HTTPS
-      //httpOnly -> false or rm
-  // res.cookie('token', token, {
-  //   expires: new Date(Date.now() + 1000000),
-  //   secure: false,
-  //   httpOnly: true,
-  // });
-  res.redirect('/main');
+  //create and assign a token to response header
+  const expiration = process.env.COOKIE_LIFETIME;
+  const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
+  
+  res.header('uid', user._id);
+  res.cookie('token', token, {
+  expires: new Date(Date.now() + expiration),
+  secure: false, //HTTPS else false
+  httpOnly: false
+  });
+  const test = req.body.userId;  
+  res.send(test);
+  //res.send(req.headers.uid);
+  //res.redirect('/main');
+  
 });
 
-router.get('/logout', (req, res) => {
-  toke = '';
-  res.header('auth-token', '');
-  res.render('logout', { title: 'Login'});
-});
+
 
 router.get('/login',  (req, res,next) => {
   res.render('login', { title: 'Login'});

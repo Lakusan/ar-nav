@@ -1,0 +1,47 @@
+GET https://127.0.0.1:8443
+rest-client.previewOption
+
+
+###
+
+GET https://127.0.0.1:8443/main
+content-type: application/json
+
+{
+    "auth-token" = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjYwZTI1Y2I5ZmI4MDY1NTBkOGY4MjEiLCJpYXQiOjE2MDA0MTUyNTJ9.mm0E1WYYW-h0cahcoTSz-Nb4OGsF5TiE0pBryNeecJc
+}
+
+####
+
+GET https://127.0.0.1:8443/guest
+
+###
+
+GET https://127.0.0.1:8443/auth/logout
+
+###
+
+POST https://127.0.0.1:8443/auth/login
+content-type: application/json
+
+{
+    "email" : "admin@ar-nav.com",
+    "password" : "password"
+}
+
+###
+
+GET https://127.0.0.1:8443/posts
+
+###
+POST https://127.0.0.1:8443/posts
+
+###
+DELETE  https://127.0.0.1:8443/posts
+
+###
+PUT  https://127.0.0.1:8443/posts
+
+
+
+

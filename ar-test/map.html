@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI with Map</title>
+  <!-- AR.js -->
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+  <!-- Leaflet.js -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+  <!-- fontawesome - icons  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Orbitron from googlefonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800&display=swap" rel="stylesheet">
+  <!-- custom styles -->
+  <link rel="stylesheet" type="text/css" href="styles/ui.css">
+  <!-- leaflet-overpass-layer -->
+  <link rel="stylesheet" type="text/css" href="node_modules/leaflet-overpass-layer/dist/OverPassLayer.css">
+  <script src="node_modules/leaflet-overpass-layer/dist/OverPassLayer.bundle.js"></script>
+
+</head>
+
+<body>
+
+  <div class="wrapper" id="settingsMenuButtons">
+    <div onclick="toogleQuitBtn()">
+      <p>Quit</p>
+    </div>
+    <div onclick="toogleSettingsBtn()">
+      <p>Settings</p>
+    </div>
+    <div onclick="toogleMenuBtn()">
+      <p>Menu</p>
+    </div>
+    <button id="btnSettings" onclick="toogleSettingsMenu()">Settings</button>
+  </div>
+  <h1>ARApp</h1>
+
+
+  <div class="menu-wrapper">
+    <div id="menubar">
+      <div>Own_latitude: <span id="latitude"></span>&deg;</br></div>
+      <div>Own_longitude: <span id="longitude"></span>&deg;</div>
+    </div>
+
+
+    <div id="myBottombar" class="bottombar">
+      <button id="btnToggleMap" onclick="toggleMap()">Map</button>
+      <div id="mymap"></div>
+    </div>
+    
+    <script>
+      //Geolocation and Leaflet.js control
+      if ('geolocation' in navigator) {
+        console.log('geolocation available');
+
+        //geolocation data
+        navigator.geolocation.getCurrentPosition(position => {
+          // lat = position.coords.latitude;
+          // lon = position.coords.longitude;
+          //SRH 49.4142497,8.6506959
+          lat= 49.4142497;
+          lon= 8.6506959;
+          console.log(lat, lon);
+          document.getElementById('latitude').textContent = lat;
+          document.getElementById('longitude').textContent = lon;
+
+          //Leaflet map control
+          const mymap = L.map('mymap').setView([lat, lon], 50);
+          const attribution =
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+          const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+          const tiles = L.tileLayer(tileUrl, { attribution });
+           tiles.addTo(mymap);
+          const marker = L.marker([lat, lon]).addTo(mymap);
+
+          //Overpass Query - Show POI near Player
+          var osm= new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mymap);
+var esri= new L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {attribution: 'Tiles © Esri'});
+//Tiles: Satelite or drawn
+var baseMaps = {
+  "OSM": osm,
+  "ESRI": esri
+};
+function cercaLLoc(valor) {
+  if (valor) {
+    var center = JSON.parse(valor);
+    map.setView([center.lat, center.lng], 16);
+    cercaCapaOverpass(null);
+  }
+}
+var controlCapas = L.control.layers(baseMaps, null);
+controlCapas.addTo(mymap);
+        });
+      } else {
+        console.log('geolocation not available');
+      }
+      function cercaCapaOverpass(position) {
+  if (map.hasLayer(opl)) {  map.removeLayer(opl) }
+  var center;
+  if (position) {
+    center = position;
+  } else {
+    center = map.getCenter();
+  }
+  opl = new L.OverPassLayer({
+    minZoom: 9,
+    endPoint: 'https://overpass-api.de/api/',
+    query: 'node(around:5000.0,' + center.lat + ',' + center.lng + ')["amenity"="parking"];out;',
+    onSuccess: function(data) {
+    var grupo= L.markerClusterGroup({ showCoverageOnHover: true, disableClusteringAtZoom:17 });
+    for(i=0;i<data.elements.length;i++) {
+        e = data.elements[i];
+        var pos = new L.LatLng(e.lat, e.lon);
+        console.info(e.tags);
+        L.marker(pos,{
+           icon:restaurantIcon,
+           title:e.tags.name, //shows restaurants names
+           tipus:e.tags.amenity 
+        }).on('click', markerOnClick).addTo(grupo); //add markers to the cluster
+    }
+    map.addLayer(grupo); //to add the cluster to the map
+    function markerOnClick(event){
+       var restaurante = event.target.options.tipus + " "
+       +event.target.options.title;
+       window.open('https://www.google.com/?q='+restaurante,
+       '_blank');
+     }
+     },
+     minZoomIndicatorOptions: {
+        position: 'topright',
+        minZoomMessage: 'Current zoom level: CURRENTZOOM - All data at level: MINZOOMLEVEL'
+     }
+     });
+     map.addLayer(opl);
+}
+var restaurantIcon= L.icon({
+  iconUrl:'icono_rest.svg',
+  iconSize: [38, 95],
+  iconAnchor: [22, 94],
+  popupAnchor: [-3, -76],
+});
+
+
+      //Toggle Buttons für Map and Menu
+      let isMap = false;
+      let isSet = false;
+
+      function toggleMap() {
+        let myBottombar = document.getElementById("myBottombar");
+        if (!isMap) {
+          myBottombar.style.height = "200px";
+          isMap = true;
+        }
+        else {
+          myBottombar.style.height = "0";
+          isMap = false;
+        }
+      }
+
+      function toogleSettingsMenu() {
+        let settings = document.getElementById("settingsMenuButtons");
+        if (!isSet) {
+          settings.style.top = "0px";
+          isSet = true;
+        }
+        else {
+          settings.style.top = "-100px";
+          isSet = false;
+        }
+      }
+
+      function toogleSettingsBtn() {
+        console.log("settings");
+      }
+      function toogleQuitBtn() {
+        console.log("Quit");
+
+      }
+      function toogleMenuBtn() {
+        console.log("Menu");
+      }
+
+    </script>
+<!-- <a-scene embedded arjs>
+  <a-marker preset="hiro">
+    <a-entity
+      position="0 0 0"
+      scale="0.05 0.05 0.05"
+      gltf-model="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf"
+    ></a-entity>
+  </a-marker>
+  <a-entity camera></a-entity>
+</a-scene> -->
+</body>
+
+</html>

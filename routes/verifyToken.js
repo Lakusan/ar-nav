@@ -1,4 +1,5 @@
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 
 //token
 // module.exports = function (req, res, next) {
@@ -7,25 +8,29 @@
 
 //     try {
 //         const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-//         req.user= verified;
+//         req.user = verified;
 //         next();
 //     } catch(err) {
 //         res.status(400).send('Invalid Token');
 //     }      
 // }
-//cookie standalone -> depreached -> changed to Express Session
-    // module.exports = async (req, res, next) => {
-    //     const token = req.cookies.token || 'Cookie';
-    //     try {
-    //       if (!token) {
-    //         return res.status(401).json('You need to Login')
-    //       }
-    //       const decrypt = await jwt.verify(token, process.env.TOKEN_SECRET);
-    //       req.user = {
-    //         _id: decrypt._id,      
-    //       };
-    //       next();
-    //     } catch (err) {
-    //       return res.status(500).json(err.toString());
-    //     }
-    //   };
+
+//Cookie
+
+module.exports = async (req, res, next) => {
+  const token = req.cookies.token;
+    try {
+    if (!token) {
+      return res.status(401).json('You need to Login')
+    }
+    const decrypt = await jwt.verify(token, process.env.TOKEN_SECRET);
+    req.user = {
+      id: decrypt.id,
+      firstname: decrypt.firstname,
+    };
+    next();
+  } catch (err) {
+    return res.status(500).json(err.toString());
+  }
+};
+

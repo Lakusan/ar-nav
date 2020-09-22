@@ -6,25 +6,22 @@ const logger = require('morgan');
 const hbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const session = require('express-session');
-
-
-
-//const expressSession= require('express-session');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
-//Import Routes<h1>MAIN CONTENT</h1>
+//ROUTER
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
-const postsRouter = require('./routes/posts');
+const commentsRouter = require('./routes/comments');
 const mainRouter = require('./routes/main');
 const guestRouter = require('./routes/guest');
+const testRouter = require('./routes/test');
+const locationsRouter = require('./routes/locations');
 
-//Environment variables
+//ENV
 dotenv.config();
 
-//Connect to DB
+//DATABASE
 mongoose.connect(process.env.DB_CONNECT, 
 { useUnifiedTopology: true ,
   useNewUrlParser: true},
@@ -32,28 +29,25 @@ mongoose.connect(process.env.DB_CONNECT,
 
 const app = express();
 
-//middleware
-// view engine
+//MIDDLEWARE
 app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts/'}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
-//app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
 app.use(cookieParser());
-// process.env.TOKEN_SECRET
-app.use(session({secret: 'max', saveUninitialized: false, resave: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Routes
+//ROUTES
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
-app.use('/posts', postsRouter);
+app.use('/comments', commentsRouter);
 app.use('/main', mainRouter);
 app.use('/guest', guestRouter);
+app.use('/test', testRouter);
+app.use('/locations', locationsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

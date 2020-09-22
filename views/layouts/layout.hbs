@@ -8,25 +8,22 @@
   <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
   <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
   <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
-  <!-- Leaflet.js -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-    crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-    crossorigin=""></script>
+  <script src="javascripts/accessControl.js"></script>
+
+
 </head>
 
 <body>
+
 
 <ons-splitter>
   <ons-splitter-side id="onsen-Menu" side="left" width="220px" collapse swipeable>
     <ons-page>
       <ons-list>
-        <ons-list-item onclick="fn.load('home.html')" tappable>
-          Home
+        <ons-list-item onclick="history.back()" tappable>
+          Back
         </ons-list-item>
-        <ons-list-item onclick="fn.load('settings.html')" tappable>
+        <ons-list-item onclick="logout()" tappable>
           Logout
         </ons-list-item>
         <ons-list-item onclick="fn.load('about.html')" tappable>
@@ -58,21 +55,6 @@
   </ons-page>
 </template>
 
-<template id="settings.html">
-  <ons-page>
-    <ons-toolbar>
-      <div class="left">
-        <ons-toolbar-button onclick="fn.open()">
-          <ons-icon icon="md-menu"></ons-icon>
-        </ons-toolbar-button>
-      </div>
-      <div class="center">
-        Logout
-      </div>
-    </ons-toolbar>
-  </ons-page>
-</template>
-
 <template id="about.html">
   <ons-page>
     <ons-toolbar>
@@ -87,7 +69,7 @@
     </ons-toolbar>
     <h1>Thank you :)</h1>
 
-    Picture of githb account image
+    Picture of github account image
     Whoami
 
     SRH Heidelberg link
@@ -117,10 +99,22 @@ window.fn.load = function(page) {
   var content = document.getElementById('content');
   var menu = document.getElementById('onsen-Menu');
   content.load(page)
-    .then(menu.close.bind(menu));
+    .then(menu.close.bind(menu)); 
 };
 
+function logout() {
+document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+history.back();
+
+}
 
     </script>
+
+ 
+
+     
 </body>
+  
+
+
 </html>

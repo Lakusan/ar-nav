@@ -5,13 +5,48 @@
 
 
 BACKEND
-+ Routing
-+ DB (Connection, Model, Secret Acc Data-> ENV)
+[X] REST API 
+        [X] auth.js
+                [X] register
+                        [X] Validate input (JOI)
+                        [X] Check if email exists
+                        [X] Check if name exists
+                        [X] Hash Password (bcrypt)
+                        [X] Store new User in DB
+                [X] login user
+                        [X] Valtdate input (JOI)
+                        [X] Check if email/password is valid
+                        [X] Assign JSON WEB TOKEN to UID
+                        [X] Redirect to main app
+                [ ] logout user
+                        [ ] Make Token invalid
+                        [ ] Redirect to index
+
+        [ ]verifyToken.js (verify user access to private routes)
+                [ ] No token in Header -> no Access
+                [ ] Token Valid -> User = valid
+                 
+           [ ] Comments
+           [ ] forms
+
+        [ ] Views
+           [ ] main App
+           [ ] index
+           [ ] forms
+                [ ] login
+                [ ] register
+           [ ] logout
+
+        
+
+
+
+[ ] DB (Connection, Model, Secret Acc Data-> ENV)
 + DotEnv
 + Register User
 + Login
 + Validate Input Data
-+ JSON WEb Token -> Session
++ JSON WEb Token
 - Gelocation Data -> Calc Distance to POI
 - Get Geolocation POI
 - APIs:
