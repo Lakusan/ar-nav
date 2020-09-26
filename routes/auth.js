@@ -14,7 +14,7 @@ router.post('/register',urlencodedParser, async (req, res) => {
   const { error } = registerValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  // Check if user is already in registered
+  // Check if user is already registered
   const emailExist = await User.findOne({ email: req.body.email });
   if (emailExist) return res.status(400).send('Email already exists');
 
@@ -58,27 +58,38 @@ router.post('/login', urlencodedParser, async (req, res) => {
   //create and assign a token to response header
   const expiration = process.env.COOKIE_LIFETIME;
   const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-  
-  res.header('uid', user._id);
+  await User.findByIdAndUpdate(user._id, { token })
+    // res.status(200).json({
+    //   data: { email: user.email, role: user.role },
+    //   accessToken
+    // })
+    // res.redirect(200, '/').json({
+    //     data: { email: user.email, role: user.role },
+    //     accessToken })
+  // var userdata = {"name": user.name, "role": user.role};
+  // 
   res.cookie('token', token, {
-  expires: new Date(Date.now() + expiration),
-  secure: false, //HTTPS else false
-  httpOnly: false
+  expires: new Date(Date.now() + 600),
+  secure: false, 
+  httpOnly: true
   });
-  const test = req.body.userId;  
-  res.send(test);
-  //res.send(req.headers.uid);
-  //res.redirect('/main');
-  
+  res.header('userRole', user.role);
+  //res.redirect(302,'http://localhost:3005/main');
+  res.end();
+ 
 });
 
+router.get('/user', async (req, res) => {
+  const query = await User.find({});
+  res.json(query);
+  
+})
 
-
-router.get('/login',  (req, res,next) => {
+router.get('/login',  (req, res) => {
   res.render('login', { title: 'Login'});
 });
 
-router.get('/register',  (req, res,next) => {
+router.get('/register',  (req, res) => {
   res.render('register', { title: 'Register'});
 });
 

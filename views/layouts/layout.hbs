@@ -8,7 +8,9 @@
   <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
   <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
   <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
-  <script src="javascripts/accessControl.js"></script>
+   <script src="/javascripts/locations.js"></script>
+   <script src="/javascripts/HTTPreq.js"></script>
+   
 
 
 </head>
@@ -94,14 +96,6 @@ window.fn.open = function() {
   var menu = document.getElementById('onsen-Menu');
   menu.open();
 };
-
-window.fn.load = function(page) {
-  var content = document.getElementById('content');
-  var menu = document.getElementById('onsen-Menu');
-  content.load(page)
-    .then(menu.close.bind(menu)); 
-};
-
 function logout() {
 document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 history.back();

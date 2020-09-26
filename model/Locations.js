@@ -1,5 +1,5 @@
-const { string } = require('joi');
 const mongoose = require('mongoose');
+
 
 const LocationsSchema = new mongoose.Schema({
     name: {
@@ -16,18 +16,6 @@ const LocationsSchema = new mongoose.Schema({
     }, 
     description: {
         type: String,
-    },
-    post: {
-        data: {
-            author: String,
-            message: String,
-            
-            comment: {
-                author: String,
-                message: String,
-                
-            }
-        }
     },
     model: {
         type: String,

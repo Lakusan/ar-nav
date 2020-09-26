@@ -1,27 +1,27 @@
-GET https://127.0.0.1:8443
+GET http://127.0.0.1:3005
 rest-client.previewOption
 
 
 ###
 
-GET https://127.0.0.1:8443/main
+GET http://127.0.0.1:3005/main
 content-type: application/json
 
 {
-    "auth-token" = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjYwZTI1Y2I5ZmI4MDY1NTBkOGY4MjEiLCJpYXQiOjE2MDA0MTUyNTJ9.mm0E1WYYW-h0cahcoTSz-Nb4OGsF5TiE0pBryNeecJc
+    "auth-token" = 
 }
 
 ####
 
-GET https://127.0.0.1:8443/guest
+GET http://127.0.0.1:3005/
 
 ###
 
-GET https://127.0.0.1:8443/auth/logout
+GET http://127.0.0.1:3005/auth/logout
 
 ###
 
-POST https://127.0.0.1:8443/auth/login
+POST http://127.0.0.1:3005/auth/login
 content-type: application/json
 
 {
@@ -31,16 +31,73 @@ content-type: application/json
 
 ###
 
-GET https://127.0.0.1:8443/posts
+GET http://127.0.0.1:3005/comments
 
 ###
-POST https://127.0.0.1:8443/posts
+POST http://127.0.0.1:3005/comments
+content-type: application/json
+
+{
+    "title" : "4th Post Title",
+    "content" : "Hallo this is the 4th Post. I want to talk about this Location",
+    "author" : "Albert Einstein",
+    "locationID" : "",
+    "comments": []
+}
 
 ###
-DELETE  https://127.0.0.1:8443/posts
+DELETE  http://127.0.0.1:3005/comments/5f6f148ba8d9ef1f48fb84f1
+
 
 ###
-PUT  https://127.0.0.1:8443/posts
+PUT  http://127.0.0.1:3005/comments/5f6f14aea8d9ef1f48fb84f3
+content-type: application/json
+
+{
+"locationID": {
+Forecourt
+},
+   "comments":[
+        {
+            "author": "Albert Einstein",
+            "comment" : "This is the 2nd Comment on the 1st Post from Herbert Mueller."
+        }
+   ]
+    
+}
+###
+
+GET http://127.0.0.1:3005/locations
+
+###
+POST http://127.0.0.1:3005/locations
+content-type: application/json
+
+  {
+    "name": "Campus Library",
+    "lat": "49.412210",
+    "lon": "8.654399",
+    "description": "Location at the Campus Library",
+    "model": "one.gltf",
+    "author": "Administrator"
+  }
+
+###
+DELETE  http://127.0.0.1:3005/locations/5f68b2c0b2bcf360b98a8e54
+
+
+###
+PUT  http://127.0.0.1:3005/locations/5f6f14aea8d9ef1f48fb84f3
+content-type: application/json
+
+ {
+    "locationID": "1"
+   
+  }
+
+
+
+
 
 
 

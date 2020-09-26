@@ -19,6 +19,7 @@ const dotenv = require('dotenv');
 
 module.exports = async (req, res, next) => {
   const token = req.cookies.token;
+  console.log(token);
     try {
     if (!token) {
       return res.status(401).json('You need to Login')

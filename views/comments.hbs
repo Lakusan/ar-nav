@@ -1,0 +1,141 @@
+<div style="text-align: center; margin-top: 30px;">
+    <p>
+        <ons-button modifier="material">
+            <ons-ripple></ons-ripple>
+            New Post
+        </ons-button>
+    </p>
+    <div>
+        KOMMENTS
+           <p>
+        <ons-button modifier="material">
+            <ons-ripple></ons-ripple>
+            Add Comment
+        </ons-button>
+    </p>
+
+    </div>
+ 
+    <p style="margin-top: 30px;">
+
+        <button class="btn" onclick="history.back()">Cancel</button>
+    </p>
+</div>
+  <section id="control-center">
+    <button id="get-btn">GET Data</button>
+    <button id="post-btn">POST Data</button>
+  </section>
+
+
+<template id="NewPost.html">
+    <ons-page>
+        <ons-toolbar>
+            <div class="left">
+                <ons-toolbar-button onclick="fn.open()">
+                    <ons-icon icon="md-menu"></ons-icon>
+                </ons-toolbar-button>
+            </div>
+            <div class="center">
+                {{title}}
+            </div>
+        </ons-toolbar>
+        <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
+            {{{ body }}}
+        </p>
+    </ons-page>
+</template>
+
+<template id="NewComment.html">
+    <ons-page>
+        <form method="POST" action="">
+            <div style="text-align: center; margin-top: 30px;">
+                <p>
+                    <ons-input id="username" modifier="underbar" placeholder="Username" name="author" required float>
+                    </ons-input>
+                </p>
+                <p>
+                    <ons-input id="Message" modifier="underbar" placeholder="Message Text" name="message" requiered
+                        float>
+                    </ons-input>
+                </p>
+
+                <p style="margin-top: 30px;">
+                    <button class="btn" type="submit">Post</button>
+                    <button class="btn" onclick="history.back()">Cancel</button>
+                </p>
+            </div>
+        </form>
+    </ons-page>
+</template>
+
+<template id="All.html">
+    <ons-page>
+
+        <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
+
+        </p>
+    </ons-page>
+</template>
+
+<script>
+    window.fn = {};
+
+    window.fn.loadMe = function (page) {
+        var content = document.getElementById('content');
+        content.load(page);
+
+    };
+
+//////TEST
+const getBtn = document.getElementById('get-btn');
+const postBtn = document.getElementById('post-btn');
+
+const sendHttpRequest234 = (method, url, data) => {
+  const promise = new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+
+    xhr.responseType = 'json';
+
+    if (data) {
+      xhr.setRequestHeader('Content-Type', 'application/json');
+    }
+
+    xhr.onload = () => {
+      if (xhr.status >= 400) {
+        reject(xhr.response);
+      } else {
+        resolve(xhr.response);
+      }
+    };
+
+    xhr.onerror = () => {
+      reject('Something went wrong!');
+    };
+
+    xhr.send(JSON.stringify(data));
+  });
+  return promise;
+}; 
+const getData = () => {
+  sendHttpRequest('GET', 'http://127.0.0.1:3005/auth/user').then(responseData => {
+    console.log(responseData);
+  });
+};
+
+const sendData = () => {
+  sendHttpRequest('POST', 'https://reqres.in/api/register', {
+    email: 'eve.holt@reqres.in'
+    // password: 'pistol'
+  })
+    .then(responseData => {
+      console.log(responseData);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+getBtn.addEventListener('click', getData);
+postBtn.addEventListener('click', sendData);
+</script>

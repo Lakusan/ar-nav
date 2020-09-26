@@ -1,27 +1,53 @@
 const express = require('express');
 const User = require('../model/User');
 const Locations=  require('../model/Locations');
+const Posts=  require('../model/Posts');
 const router = express.Router();
 const verify = require('./verifyToken');
 
-
+router.get('/', async (req, res) => {
+    try{
+    const postItems = await Posts.find();
+    if (!postItems) throw new Error('Something with DB went wrong');
+    const sortedItems = postItems.sort((a,b) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+    })
+    res.status(200).json(sortedItems);
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+    // res.render('comments', { title: 'Comments'});
+})
 
 router.post('/', async (req, res) => {
-    const newBucketListItem = new BucketListItem(req.body)
-    try {
-        const bucketListItem = await newBucketListItem.save()
-        if (!bucketListItem) throw new Error('Something went wrong saving the bucketListItem')
-        res.status(200).json(bucketListItem)
-    } catch (error) {
-        res.status(500).json({ message: error.message })
-    }
+ 
+    const titleExist = await Posts.findOne({ title: req.body.title });
+    if (titleExist) return res.status(400).send('Post already exists');
+     //Create New Post
+    const post = new Posts({
+    title: req.body.title,
+    content: req.body.content,
+    author: req.body.author,
+    comments: [{
+        author: req.body.comments.author,
+        comment: req.body.comments.comment,
+    }]
+    })
+  try {
+    const savedPost = await post.save();
+ 
+  } catch (err) {
+    res.status(400).send(err);
+  }
+ 
 })
 
 router.put('/:id', async (req, res) => {
     const { id } = req.params
+    
 
     try {
-        const response = await BucketListItem.findByIdAndUpdate(id, req.body)
+        const response = await Posts.findByIdAndUpdate(id, {$push: req.body})
         if (!response) throw Error('Something went wrong ')
         const updated = { ...response._doc, ...req.body }
         res.status(200).json(updated)
@@ -32,8 +58,9 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     const { id } = req.params
+  
     try {
-        const removed = await BucketListItem.findByIdAndDelete(id)
+        const removed = await Posts.findByIdAndDelete(id)
         if (!removed) throw Error('Something went wrong ')
         res.status(200).json(removed)
     } catch (error) {

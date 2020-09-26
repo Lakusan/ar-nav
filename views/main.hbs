@@ -1,5 +1,20 @@
 
     
+<p id="userRole" style="visibility: hidden">{{userrole}}</p>
+<p id="userName" style="visibility: hidden">{{username}}</p>
+{{title}}
+
+<script>  
+    var userRole;
+    var userName;
+    window.onload = () => {
+    getLocationsData();
+        
+userRole= document.getElementById('userRole').innerHTML;
+userName= document.getElementById('userName').innerHTML;
 
 
 
+
+    }
+</script>

@@ -1,19 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const Locations = require('../model/Locations');
-const Comments = require('../model/Comments');
 const { route } = require('./auth');
 
 //LOCATIONS - POINTS OF INTEREST
 //Get all Locations
-router.get('/',  async (req, res, next) => {
+router.get('/',  async (req, res) => {
     try {
         const locations = await Locations.find()
-        if (!locations) throw new Error('No bucketListItems')
+        if (!locations) throw new Error('No Locations')
         const sorted = locations.sort((a, b) => {
             return new Date(a.date).getTime() - new Date(b.date).getTime()
         })
-        res.render('main', { title: 'Main'})
+        
         res.status(200).json(sorted)
 
     } catch (error) {
@@ -22,7 +21,7 @@ router.get('/',  async (req, res, next) => {
 });
 
 //Get Location by ID
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', async (req, res) => {
     try {
         const location = await Locations.findById(req.params.id);
         if (!location)  throw new Error('id not found');

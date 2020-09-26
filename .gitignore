@@ -1,2 +1,5 @@
 .env
 node_modules
+API_TEST.http
+info.md
+ToDo.md
