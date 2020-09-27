@@ -30,7 +30,6 @@ const routes = [
     name: 'MainMenu',
     component: MainMenu
   },
-
     
 ]
 

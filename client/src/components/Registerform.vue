@@ -20,14 +20,15 @@
                 
               </v-toolbar>
               <v-card-text>
-                <v-form>
+                <v-form ref="form" v-model="valid" lazy-validation >
                   <v-text-field
                     label="Name"
                     name="name"
                     prepend-icon="mdi-account"
                     type="text"
                     v-model="name"
-                    
+                    required
+                    :rules="nameRules"
                   ></v-text-field>
                    <v-text-field
                     label="E-Mail"
@@ -35,6 +36,8 @@
                     prepend-icon="mdi-email"
                     type="text"
                      v-model="email"
+                     required
+                     :rules="emailRules"
                   ></v-text-field>
                   
 
@@ -45,6 +48,8 @@
                     prepend-icon="mdi-lock"
                     type="password"
                      v-model="password"
+                     required
+                     :rules="passwordRules"
                   ></v-text-field>
                     <v-text-field
                     id="confirmPassword"
@@ -53,6 +58,7 @@
                     prepend-icon="mdi-repeat"
                     type="password"
                      v-model="passwordConfirmation"
+                     :rules="[passwordConfirmationRule, passwordRules ]"
                   ></v-text-field>
                 </v-form>
               </v-card-text>
@@ -81,6 +87,24 @@
       password: "",
       passwordConfirmation: "",
    
+     valid: true,
+    
+     passwordRules: [
+        v => !!v || 'Password is required',
+        v => (v && v.length >= 6) || 'Password must be more than 6 characters',
+      ],
+ nameRules: [
+        v => !!v || 'Name is required',
+        v => (v && v.length >= 3) || 'Name must be more than 3 characters',
+      ],
+
+    emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
+
+
+
       return: {
         name: "",
         email: "",
@@ -105,6 +129,7 @@
           if(response) {
             this.$router.push('/home')
             }
+            this.reset();
             //handle response and save JWT
             // this.$router.push('/signup')
         })
@@ -116,6 +141,21 @@
       }
       
     },
+reset () {
+        this.$refs.form.reset()
+      },
+
+      validate () {
+        if(this.$refs.form.validate()){
+          this.signUp();
+        }
+      },
+
+    },
+    computed: {
+passwordConfirmationRule() {
+      return () => (this.password === this.passwordConfirmation) || 'Password must match'
+    }
     }
   
 }

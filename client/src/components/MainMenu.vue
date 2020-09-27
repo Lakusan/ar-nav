@@ -100,16 +100,16 @@
         </v-card-title>
         <v-card-text>
           <v-container>
+            <v-form ref="form" v-model="valid">
             <v-row>
-            
               <v-col cols="12">
                 <v-text-field label="Author*" name="author" v-model="author" required></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field label="Comment*"  name="comment" v-model="comment" required></v-text-field>
               </v-col>
-              
             </v-row>
+            </v-form>
           </v-container>
           <small>*indicates required field</small>
         </v-card-text>
@@ -182,7 +182,13 @@
       </v-row>
     </div>
 
+ <v-btn color="indigo" class="ma-2 mt-20" dark @click="arApp">
+          Main App
+        </v-btn>
 
+         <v-btn color="indigo" class="ma-2 mt-20" dark @click="arApp">
+          Logout
+        </v-btn>
 
     
   </v-app>
@@ -199,7 +205,7 @@ import axios from "axios";
 
 export default {
   data: () => {
- 
+      
     return {
       locations: undefined,
       selectedLocation: undefined,
@@ -208,12 +214,7 @@ export default {
       activePosts: undefined,
       author: undefined,
       comment: undefined,
-      
-     
- 
-
-      
-
+      valid: true,
 
       dialog: false,
       commentDialog: false,
@@ -259,33 +260,29 @@ export default {
       }
     },
 
-resetForm(){
-  this.$refs.form.reset()
-},
+
 
     addComment(e) {
-      // alert(e);
-//      axios({   method: 'put',   url: 'http://127.0.0.1:3005/comments/' + e ,   comments: {     author: this.author, comemnt: this.comment    } });
-axios
-        .put("http://127.0.0.1:3005/comments/" + e, 
-        {
-          comments: {
-          author: this.author,
-          comment: this.comment
-          }
-        }
-        )
-        .then((response) => {
-          console.log(response);
-          alert("Success !");
-//  this.resetForm();
-
-          this.commentDialog = false;
-        })
-        .catch((err) => {
-          alert("Please check your inputs" + err);
-        });
-//console.log(this.author);
+      console.log(e);
+// axios
+//         .put("http://127.0.0.1:3005/comments/" + e, 
+//         {
+//           comments: {
+//           author: this.author,
+//           comment: this.comment
+//           }
+          
+//         }
+//         )
+//         .then((response) => {
+//           console.log(response);
+//           alert("Success !");
+//           this.commentDialog = false;
+//          // this.reset();
+//         })
+//         .catch((err) => {
+//           alert("Please check your inputs" + err);
+//         });
     },
 
     nope(){
@@ -296,6 +293,19 @@ axios
       this.$data.selectedLocation = e;
       this.getPostById(e);
     },
+
+    reset () {
+        this.$refs.form.reset()
+      },
+
+      arApp(){
+      window.location.href = "https://lakusan.github.io/ARMarkerbased/";
+      },
+      logout() {
+document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+history.back();
+
+}
      
   },
 };

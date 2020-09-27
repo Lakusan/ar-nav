@@ -5,7 +5,7 @@ const Posts=  require('../model/Posts');
 const router = express.Router();
 const verify = require('./verifyToken');
 
-router.get('/', async (req, res) => {
+router.get('/',verify,async (req, res) => {
     try{
     const postItems = await Posts.find();
     if (!postItems) throw new Error('Something with DB went wrong');

@@ -56,13 +56,15 @@
               <v-toolbar-title>Sign in</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-              <v-form id="LoginFormCompontent">
+              <v-form id="LoginFormCompontent" ref="form" v-model="valid" lazy-validation>
                 <v-text-field
                   label="E-Mail"
                   name="email"
                   prepend-icon="mdi-account"
                   type="text"
                   v-model="email"
+                  
+                  :rules="emailRules"
                 ></v-text-field>
 
                 <v-text-field
@@ -72,6 +74,8 @@
                   prepend-icon="mdi-lock"
                   type="password"
                   v-model="password"
+                 
+                  :rules="passwordRules"
                 ></v-text-field>
               </v-form>
             </v-card-text>
@@ -80,8 +84,8 @@
                 >Sign up</v-btn
               >
               <v-spacer></v-spacer>
-              <v-btn color="indigo" class="white--text" @click="login()"
-                >Login</v-btn
+              <v-btn color="indigo" class="white--text" @click="validate"
+                :disabled="!valid ">Login</v-btn
               >
             </v-card-actions>
           </v-card>
@@ -105,7 +109,18 @@ export default {
     drawer: false,
     email: "",
     password: "",
+    valid: true,
+    
+     passwordRules: [
+        v => !!v || 'Password is required',
+        v => (v && v.length >= 6) || 'Password must be more than 6 characters',
+      ],
 
+
+    emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
     return: {
       email: "",
       password: "",
@@ -114,19 +129,35 @@ export default {
 
   methods: {
     login() {
+    
       axios
         .post("http://127.0.0.1:3005/auth/login", {
           email: this.email,
           password: this.password,
         })
         .then((response) => {
-          console.log(response);
+         // console.log(response);
+          console.log(response.headers);
+          //this.$cookie.set('token',response.data.token);
           alert("Login Success !");
+          //this.reset();
         })
         .catch((err) => {
-          alert("Please check your inputs" + err);
+          alert("Please check your inputs  " + err);
         });
+        
+      
     },
+
+     reset () {
+        this.$refs.form.reset()
+      },
+
+      validate () {
+        if(this.$refs.form.validate()){
+          this.login();
+        }
+      },
   },
 };
 </script>
