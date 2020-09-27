@@ -16,7 +16,18 @@ router.get('/', async (req, res) => {
     } catch (error) {
         res.status(500).json({message: error.message});
     }
+    
     // res.render('comments', { title: 'Comments'});
+})
+
+router.get('/:id', async (req, res) => {
+    try {
+        const post = await Posts.find({locationID: req.params.id});
+        if (!post)  throw new Error('id not found');
+        res.send(post);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 })
 
 router.post('/', async (req, res) => {
@@ -28,10 +39,7 @@ router.post('/', async (req, res) => {
     title: req.body.title,
     content: req.body.content,
     author: req.body.author,
-    comments: [{
-        author: req.body.comments.author,
-        comment: req.body.comments.comment,
-    }]
+   
     })
   try {
     const savedPost = await post.save();
